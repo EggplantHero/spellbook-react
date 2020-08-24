@@ -30,7 +30,7 @@ class App extends Component {
             <Route path="/login" component={LoginForm} />
             <Route path="/logout" component={Logout} />
             <ProtectedRoute path="/spells/:id" component={SpellForm} />
-            <Route
+            <ProtectedRoute
               path="/spells"
               render={(props) => <Spells {...props} user={user} />}
             />
