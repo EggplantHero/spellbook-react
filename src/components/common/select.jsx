@@ -5,10 +5,12 @@ const Select = ({ name, label, options, error, ...rest }) => {
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
       <select name={name} id={name} {...rest} className="form-control">
-        <option value="" />
-        {options.map(option => (
-          <option key={option._id} value={option._id}>
-            {option.name}
+        <option defaultValue hidden>
+          --Please select {label} --
+        </option>
+        {options.map((option) => (
+          <option key={option._id || option} value={option._id || option}>
+            {option.name || option}
           </option>
         ))}
       </select>

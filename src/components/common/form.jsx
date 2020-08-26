@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Joi from "joi-browser";
 import Input from "./input";
+import TextArea from "./textArea";
+import NumInput from "./numInput";
 import Select from "./select";
 
 class Form extends Component {
@@ -16,6 +18,7 @@ class Form extends Component {
 
     const errors = {};
     for (let item of error.details) errors[item.path[0]] = item.message;
+    console.log(errors);
     return errors;
   };
 
@@ -45,8 +48,13 @@ class Form extends Component {
     const data = { ...this.state.data };
     data[input.name] = input.value;
 
+    if (input.type === "checkbox") {
+      input.value = input.checked ? true : false;
+      input.checked = !input.checked;
+    }
+
     if (input.type === "number") {
-      data[input.name] = parseInt(data[input.name]);
+      data[input.name] = parseInt(input.value);
     }
 
     this.setState({ data, errors });
@@ -75,11 +83,40 @@ class Form extends Component {
     );
   }
 
-  renderInput(name, label, type = "text") {
+  renderInput(name, label, type) {
     const { data, errors } = this.state;
 
     return (
       <Input
+        name={name}
+        type={type}
+        value={data[name]}
+        label={label}
+        onChange={this.handleChange}
+        error={errors[name]}
+      />
+    );
+  }
+
+  renderTextArea(name, label) {
+    const { data, errors } = this.state;
+
+    return (
+      <TextArea
+        name={name}
+        value={data[name]}
+        label={label}
+        onChange={this.handleChange}
+        error={errors[name]}
+      />
+    );
+  }
+
+  renderNumInput(name, label, type = "number") {
+    const { data, errors } = this.state;
+
+    return (
+      <NumInput
         type={type}
         name={name}
         value={data[name]}

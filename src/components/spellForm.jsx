@@ -11,8 +11,21 @@ class SpellForm extends Form {
       schoolId: "",
       range: "",
       castTime: "",
+      level: "",
+      description: "",
+      feet: 0,
+      minutes: 0,
     },
     schools: [],
+    ranges: [{ name: "Feet" }, { name: "Touch" }, { name: "Self" }],
+    castTimes: [
+      { name: "1 Action" },
+      { name: "1 Bonus Action" },
+      { name: "1 Reaction" },
+      { name: "Minutes" },
+    ],
+    ranges: ["Feet", "Touch", "Self"],
+    castTimes: ["1 Action", "1 Bonus Action", "1 Reaction", "Minutes"],
     errors: {},
   };
 
@@ -20,8 +33,12 @@ class SpellForm extends Form {
     _id: Joi.string(),
     name: Joi.string().required().label("Name"),
     schoolId: Joi.string().required().label("School"),
-    range: Joi.number().required().min(0).label("Range"),
-    castTime: Joi.number().required().min(0).label("Cast Time"),
+    range: Joi.string().required().label("Range"),
+    castTime: Joi.string().required().label("Cast Time"),
+    level: Joi.number().min(0).max(9).required().label("Level"),
+    description: Joi.string().max(5000).empty("").label("Description"),
+    feet: Joi.number().min(0).empty(0).label("Feet"),
+    minutes: Joi.number().min(0).empty(0).label("Minutes"),
   };
 
   async populateSchools() {
@@ -37,10 +54,7 @@ class SpellForm extends Form {
       const { data: spell } = await getSpell(spellId);
       this.setState({ data: this.mapToViewModel(spell) });
     } catch (ex) {
-      if (
-        ex.response
-        // && ex.response.status === 404
-      )
+      if (ex.response && ex.response.status === 404)
         this.props.history.replace("/not-found");
     }
   }
@@ -57,6 +71,10 @@ class SpellForm extends Form {
       schoolId: spell.school._id,
       range: spell.range,
       castTime: spell.castTime,
+      level: spell.level,
+      description: spell.description,
+      feet: spell.feet,
+      minutes: spell.minutes,
     };
   }
 
@@ -67,14 +85,20 @@ class SpellForm extends Form {
   };
 
   render() {
+    const { schools, ranges, castTimes, data } = this.state;
     return (
       <div>
         <h1>Spell Form</h1>
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("name", "Name")}
-          {this.renderSelect("schoolId", "School", this.state.schools)}
-          {this.renderInput("range", "Range", "number")}
-          {this.renderInput("castTime", "Cast Time", "number")}
+          {this.renderSelect("schoolId", "School", schools)}
+          {this.renderSelect("range", "Range", ranges)}
+          {data.range === "Feet" && this.renderNumInput("feet", "Feet Amount")}
+          {this.renderSelect("castTime", "Cast Time", castTimes)}
+          {data.castTime === "Minutes" &&
+            this.renderNumInput("minutes", "Minutes Amount")}
+          {this.renderNumInput("level", "Spell Level", "number")}
+          {this.renderTextArea("description", "Description")}
           {this.renderButton("Save")}
         </form>
       </div>

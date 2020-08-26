@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Table from "./common/table";
+import { concat, cardinal } from "../utils/formatter";
+import { capitalize } from "../utils/capitalize";
 import auth from "../services/authService";
 
 class SpellsTable extends Component {
@@ -8,32 +10,42 @@ class SpellsTable extends Component {
     {
       path: "name",
       label: "Name",
-      content: (spell) => <Link to={`/spells/${spell._id}`}>{spell.name}</Link>,
+      content: (spell) => (
+        <Link to={`/spells/${spell._id}`}>{capitalize(spell.name)}</Link>
+      ),
     },
     { path: "school.name", label: "School" },
-    { path: "range", label: "Range" },
-    { path: "castTime", label: "Cast Time" },
+    {
+      path: "range",
+      label: "Range",
+      content: (spell) => (
+        <p>{concat(spell.feet, spell.range, "Feet", "Foot")}</p>
+      ),
+    },
+    {
+      path: "castTime",
+      label: "Cast Time",
+      content: (spell) => (
+        <p>{concat(spell.minutes, spell.castTime, "Minutes", "Minute")}</p>
+      ),
+    },
+    {
+      path: "level",
+      label: "Level",
+      content: (spell) => <p>{cardinal(spell.level)}</p>,
+    },
+    {
+      key: "delete",
+      content: (spell) => (
+        <button
+          onClick={() => this.props.onDelete(spell)}
+          className="btn btn-danger btn-sm"
+        >
+          Delete
+        </button>
+      ),
+    },
   ];
-
-  deleteColumn = {
-    key: "delete",
-    content: (spell) => (
-      <button
-        onClick={() => this.props.onDelete(spell)}
-        className="btn btn-danger btn-sm"
-      >
-        Delete
-      </button>
-    ),
-  };
-
-  constructor() {
-    super();
-    const user = auth.getCurrentUser();
-    if (user && user.isAdmin) {
-      this.columns.push(this.deleteColumn);
-    }
-  }
 
   render() {
     const { spells, onSort, sortColumn } = this.props;

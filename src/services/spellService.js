@@ -16,11 +16,10 @@ export function getSpell(spellId) {
 
 export function saveSpell(spell) {
   if (spell._id) {
-    const body = { ...spell };
+    let body = { ...spell };
     delete body._id;
     return http.put(spellUrl(spell._id), body);
   }
-
   return http.post(apiEndpoint, spell);
 }
 
