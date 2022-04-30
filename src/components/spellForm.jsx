@@ -17,13 +17,6 @@ class SpellForm extends Form {
       minutes: 0,
     },
     schools: [],
-    ranges: [{ name: "Feet" }, { name: "Touch" }, { name: "Self" }],
-    castTimes: [
-      { name: "1 Action" },
-      { name: "1 Bonus Action" },
-      { name: "1 Reaction" },
-      { name: "Minutes" },
-    ],
     ranges: ["Feet", "Touch", "Self"],
     castTimes: ["1 Action", "1 Bonus Action", "1 Reaction", "Minutes"],
     errors: {},

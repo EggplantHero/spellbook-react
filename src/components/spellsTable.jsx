@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Table from "./common/table";
 import { concat, cardinal } from "../utils/formatter";
 import { capitalize } from "../utils/capitalize";
-import auth from "../services/authService";
 
 class SpellsTable extends Component {
   columns = [

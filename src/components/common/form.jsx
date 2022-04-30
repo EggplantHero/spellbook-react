@@ -53,7 +53,7 @@ class Form extends Component {
     }
 
     if (input.type === "number") {
-      data[input.name] = parseInt(input.value);
+      data[input.name] = parseInt(input.value, 10);
     }
 
     this.setState({ data, errors });
