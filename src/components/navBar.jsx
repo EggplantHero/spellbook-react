@@ -4,7 +4,10 @@ import { capitalize } from "../utils/capitalize";
 
 const NavBar = ({ user }) => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav
+      className="navbar navbar-expand-lg navbar-dark"
+      style={{ border: "1px solid black", backgroundColor: "rgba(0,0,0,0.5)" }}
+    >
       <Link className="navbar-brand" to="/">
         Spellbook
       </Link>

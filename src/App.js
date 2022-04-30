@@ -10,6 +10,7 @@ import RegisterForm from "./components/registerForm";
 import ProtectedRoute from "./components/common/protectedRoute";
 import auth from "./services/authService";
 import "./App.css";
+import Paper from "./img/parchment-bg.jpg";
 
 class App extends Component {
   state = {};
@@ -22,9 +23,16 @@ class App extends Component {
   render() {
     const { user } = this.state;
     return (
-      <React.Fragment>
+      <div style={{ background: `url(${Paper})`, height: "100vh" }}>
         <NavBar user={user} />
-        <main className="container">
+        <main
+          className="container"
+          style={{
+            backgroundColor: "rgba(0,0,0,0.1)",
+            padding: "30px",
+            borderRadius: "10px",
+          }}
+        >
           <Switch>
             <Route path="/register" component={RegisterForm} />
             <Route path="/login" component={LoginForm} />
@@ -39,7 +47,7 @@ class App extends Component {
             <Redirect to="/not-found" />
           </Switch>
         </main>
-      </React.Fragment>
+      </div>
     );
   }
 }
